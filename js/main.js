@@ -69,8 +69,25 @@ function setMap(){
 
         //Example 1.3 line 24...add enumeration units to the map
         setEnumerationUnits(franceRegions, map, path, colorScale);
+		
+		//add coordinated visualization to the map
+        setChart(csvData, colorScale);
     };
 }; //end of setMap()
+
+//function to create coordinated bar chart
+function setChart(csvData, colorScale){
+    //chart frame dimensions
+    var chartWidth = 550,
+        chartHeight = 460;
+
+    //create a second svg element to hold the bar chart
+    var chart = d3.select("body")
+        .append("svg")
+        .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .attr("class", "chart");
+};
 
 //...EXAMPLE 1.3 LINES 29-41
 
