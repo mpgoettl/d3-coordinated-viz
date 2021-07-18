@@ -75,7 +75,7 @@ function setMap(){
 //...EXAMPLE 1.3 LINES 29-41
 
 //function to create color scale generator
-function makeColorScale(data){
+function makeColorScale(csvData){
     var colorClasses = [
         "#D4B9DA",
         "#C994C7",
