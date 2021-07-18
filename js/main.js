@@ -65,7 +65,7 @@ function setMap(){
         franceRegions = joinData(franceRegions, csvData);
 		
 		//create the color scale
-        var colorScale = makeColorScale(csvData);
+        var colorScale = makeColorScale(data);
 
         //Example 1.3 line 24...add enumeration units to the map
         setEnumerationUnits(franceRegions, map, path, colorScale);
@@ -75,7 +75,7 @@ function setMap(){
 //...EXAMPLE 1.3 LINES 29-41
 
 //function to create color scale generator
-function makeColorScale(csvData){
+function makeColorScale(data){
     var colorClasses = [
         "#D4B9DA",
         "#C994C7",
@@ -90,8 +90,8 @@ function makeColorScale(csvData){
 
     //build array of all values of the expressed attribute
     var domainArray = [];
-    for (var i=0; i<csvData.length; i++){
-        var val = parseFloat(csvData[i][expressed]);
+    for (var i=0; i<data.length; i++){
+        var val = parseFloat(data[i][expressed]);
         domainArray.push(val);
     };
 
