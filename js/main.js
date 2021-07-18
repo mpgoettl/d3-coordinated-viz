@@ -7,6 +7,21 @@
 var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
 var expressed = attrArray[0]; //initial attribute
 
+//chart frame dimensions
+var chartWidth = window.innerWidth * 0.425,
+    chartHeight = 473,
+    leftPadding = 25,
+    rightPadding = 2,
+    topBottomPadding = 5,
+    chartInnerWidth = chartWidth - leftPadding - rightPadding,
+    chartInnerHeight = chartHeight - topBottomPadding * 2,
+    translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+
+//create a scale to size bars proportionally to frame and for axis
+var yScale = d3.scale.linear()
+    .range([463, 0])
+    .domain([0, 110]);
+	
 //begin script when window loads
 window.onload = setMap();
 
@@ -82,21 +97,7 @@ function setMap(){
 //function to create coordinated bar chart
 //Example 2.1 line 11...function to create coordinated bar chart
 function setChart(csvData, colorScale){
-    //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.425,
-        chartHeight = 460;
-
-    //Example 2.1 line 17...create a second svg element to hold the bar chart
-    var chart = d3.select("body")
-        .append("svg")
-        .attr("width", chartWidth)
-        .attr("height", chartHeight)
-        .attr("class", "chart");
-
-    //create a scale to size bars proportionally to frame
-    var yScale = d3.scale.linear()
-        .range([0, chartHeight])
-        .domain([0, 105]);
+   
 
     //Example 2.4 line 8...set bars for each province
     var bars = chart.selectAll(".bars")
@@ -293,7 +294,7 @@ function createDropdown(csvData){
 		.text(function(d){ return d });
 };
 
-//dropdown change listener handler
+//Example 1.4 line 14...dropdown change listener handler
 function changeAttribute(attribute, csvData){
     //change the expressed attribute
     expressed = attribute;
@@ -306,7 +307,28 @@ function changeAttribute(attribute, csvData){
         .style("fill", function(d){
             return choropleth(d.properties, colorScale)
         });
-};   
+
+    //re-sort, resize, and recolor bars
+    var bars = d3.selectAll(".bar")
+        //re-sort bars
+        .sort(function(a, b){
+            return b[expressed] - a[expressed];
+        })
+        .attr("x", function(d, i){
+            return i * (chartInnerWidth / csvData.length) + leftPadding;
+        })
+        //resize bars
+        .attr("height", function(d, i){
+            return 463 - yScale(parseFloat(d[expressed]));
+        })
+        .attr("y", function(d, i){
+            return yScale(parseFloat(d[expressed])) + topBottomPadding;
+        })
+        //recolor bars
+        .style("fill", function(d){
+            return choropleth(d, colorScale);
+        });
+};
 	
 	
 })(); //last line of main.js
