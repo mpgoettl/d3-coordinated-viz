@@ -57,7 +57,7 @@ function setMap(){
             })
             .attr("d", path);
 			
-		var graticule = d3.geoGraticule()
+		var graticule = d3.geo.graticule()
             .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
 
         //create graticule lines
