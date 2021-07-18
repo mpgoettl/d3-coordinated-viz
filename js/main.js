@@ -82,12 +82,27 @@ function setChart(csvData, colorScale){
     var chartWidth = window.innerWidth * 0.425,
         chartHeight = 460;
 
-    //create a second svg element to hold the bar chart
+    //Example 2.1 line 17...create a second svg element to hold the bar chart
     var chart = d3.select("body")
         .append("svg")
         .attr("width", chartWidth)
         .attr("height", chartHeight)
         .attr("class", "chart");
+
+    //set bars for each province
+    var bars = chart.selectAll(".bars")
+        .data(csvData)
+        .enter()
+        .append("rect")
+        .attr("class", function(d){
+            return "bars " + d.adm1_code;
+        })
+        .attr("width", chartWidth / csvData.length - 1)
+        .attr("x", function(d, i){
+            return i * (chartWidth / csvData.length);
+        })
+        .attr("height", 460)
+        .attr("y", 0);
 };
 
 //...EXAMPLE 1.3 LINES 29-41
