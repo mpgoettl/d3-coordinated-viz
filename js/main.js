@@ -164,13 +164,24 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
             return "regions " + d.properties.adm1_code;
         })
         .attr("d", path)
+        //Example 1.7 line 13
         .style("fill", function(d){
-            return colorScale(d.properties[expressed]);
+            return choropleth(d.properties, colorScale);
         });
 };
 
 
-
+//function to test for data value and return color
+function choropleth(props, colorScale){
+    //make sure attribute value is a number
+    var val = parseFloat(props[expressed]);
+    //if attribute value exists, assign a color; otherwise assign gray
+    if (typeof val == 'number' && !isNaN(val)){
+        return colorScale(val);
+    } else {
+        return "#CCC";
+    };
+};
 
 
 
