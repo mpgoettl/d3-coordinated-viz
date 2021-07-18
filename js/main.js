@@ -41,11 +41,7 @@ function setMap(){
         var graticule = d3.geo.graticule()
             .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
 
-        //create graticule background
-        var gratBackground = map.append("path")
-            .datum(graticule.outline()) //bind graticule background
-            .attr("class", "gratBackground") //assign class for styling
-            .attr("d", path) //project graticule
+        
 		
 		//create graticule lines
         var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
@@ -54,6 +50,12 @@ function setMap(){
             .append("path") //append each element to the svg as a path element
             .attr("class", "gratLines") //assign class for styling
             .attr("d", path); //project graticule lines
+			
+		//create graticule background
+        var gratBackground = map.append("path")
+            .datum(graticule.outline()) //bind graticule background
+            .attr("class", "gratBackground") //assign class for styling
+            .attr("d", path) //project graticule
 		
 		
 		//translate europe TopoJSON
