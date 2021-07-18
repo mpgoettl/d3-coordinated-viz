@@ -37,7 +37,20 @@ function setMap(){
 
    //Example 1.5 line 1
     function callback(error, csvData, europe, france){
-        //translate europe TopoJSON
+        //Example 2.5 line 3...create graticule generator
+        var graticule = d3.geoGraticule()
+            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+
+        //create graticule lines
+        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+            .data(graticule.lines()) //bind graticule lines to each element to be created
+            .enter() //create an element for each datum
+            .append("path") //append each element to the svg as a path element
+            .attr("class", "gratLines") //assign class for styling
+            .attr("d", path); //project graticule lines
+		
+		
+		//translate europe TopoJSON
         var europeCountries = topojson.feature(europe, europe.objects.EuropeCountries),
             franceRegions = topojson.feature(france, france.objects.FranceRegions).features;
 
@@ -59,21 +72,7 @@ function setMap(){
 			
 		
     };
-	 //Example 2.3 line 1
-    function callback(error, csvData, europe, france){
-        //create graticule generator
-        var graticule = d3.geoGraticule()
-            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
-
-	//create graticule lines
-        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
-            .data(graticule.lines()) //bind graticule lines to each element to be created
-            .enter() //create an element for each datum
-            .append("path") //append each element to the svg as a path element
-            .attr("class", "gratLines") //assign class for styling
-            .attr("d", path); //project graticule lines
-			
-	};
+	
 	
 };
 
