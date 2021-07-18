@@ -63,13 +63,17 @@ function setMap(){
 
         //join csv data to GeoJSON enumeration units
         franceRegions = joinData(franceRegions, csvData);
+		//create the color scale
+        var colorScale = makeColorScale(csvData);
 
-        //add enumeration units to the map
-        setEnumerationUnits(franceRegions, map, path);
+        //Example 1.3 line 24...add enumeration units to the map
+        setEnumerationUnits(franceRegions, map, path, colorScale);
     };
 }; //end of setMap()
 
-//Example 1.4 line 11...function to create color scale generator
+//...EXAMPLE 1.3 LINES 29-41
+
+//function to create color scale generator
 function makeColorScale(data){
     var colorClasses = [
         "#D4B9DA",
@@ -83,13 +87,15 @@ function makeColorScale(data){
     var colorScale = d3.scaleQuantile()
         .range(colorClasses);
 
-    //build two-value array of minimum and maximum expressed attribute values
-    var minmax = [
-        d3.min(data, function(d) { return parseFloat(d[expressed]); }),
-        d3.max(data, function(d) { return parseFloat(d[expressed]); })
-    ];
-    //assign two-value array as scale domain
-    colorScale.domain(minmax);
+    //build array of all values of the expressed attribute
+    var domainArray = [];
+    for (var i=0; i<data.length; i++){
+        var val = parseFloat(data[i][expressed]);
+        domainArray.push(val);
+    };
+
+    //assign array of expressed values as scale domain
+    colorScale.domain(domainArray);
 
     return colorScale;
 };
