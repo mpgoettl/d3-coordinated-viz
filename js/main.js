@@ -91,6 +91,6 @@ function setEnumerationUnits(franceRegions, map, path){
    
 	
 	
-})(); //last line of main.js
+});//(); //last line of main.js
 
 
