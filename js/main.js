@@ -38,7 +38,7 @@ function setMap(){
    //Example 1.5 line 1
     function callback(error, csvData, europe, france){
         //Example 2.5 line 3...create graticule generator
-        var graticule = d3.geoGraticule()
+        var graticule = d3.geo.graticule()
             .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
 
         //create graticule lines
