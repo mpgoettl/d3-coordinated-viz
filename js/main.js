@@ -90,8 +90,8 @@ function makeColorScale(csvData){
 
     //build array of all values of the expressed attribute
     var domainArray = [];
-    for (var i=0; i<data.length; i++){
-        var val = parseFloat(data[i][expressed]);
+    for (var i=0; i<csvData.length; i++){
+        var val = parseFloat(csvData[i][expressed]);
         domainArray.push(val);
     };
 
