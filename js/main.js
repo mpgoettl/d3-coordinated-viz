@@ -63,6 +63,7 @@ function setMap(){
 
         //join csv data to GeoJSON enumeration units
         franceRegions = joinData(franceRegions, csvData);
+		
 		//create the color scale
         var colorScale = makeColorScale(csvData);
 
@@ -84,7 +85,7 @@ function makeColorScale(data){
     ];
 
     //create color scale generator
-    var colorScale = d3.scaleQuantile()
+    var colorScale = d3.scale.quantile()
         .range(colorClasses);
 
     //build array of all values of the expressed attribute
@@ -167,7 +168,6 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
             return colorScale(d.properties[expressed]);
         });
 };
-
 
 
 
