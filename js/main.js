@@ -15,8 +15,8 @@ window.onload = setMap();
 //Example 1.4 line 1...set up choropleth map
 function setMap(){
 
-    //map frame dimensions
-    var width = 960,
+    /map frame dimensions
+    var width = window.innerWidth * 0.5,
         height = 460;
 
     //create new svg container for the map
@@ -76,9 +76,10 @@ function setMap(){
 }; //end of setMap()
 
 //function to create coordinated bar chart
+//Example 2.1 line 11...function to create coordinated bar chart
 function setChart(csvData, colorScale){
     //chart frame dimensions
-    var chartWidth = 550,
+    var chartWidth = window.innerWidth * 0.425,
         chartHeight = 460;
 
     //create a second svg element to hold the bar chart
