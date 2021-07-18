@@ -72,6 +72,9 @@ function setMap(){
 		
 		//add coordinated visualization to the map
         setChart(csvData, colorScale);
+		
+		//add dropdown to map
+        createDropdown(csvData);
     };
 	
 }; //end of setMap()
