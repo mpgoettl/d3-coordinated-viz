@@ -97,7 +97,12 @@ function setMap(){
 //function to create coordinated bar chart
 //Example 2.1 line 11...function to create coordinated bar chart
 function setChart(csvData, colorScale){
-   
+   //create a second svg element to hold the bar chart
+    var chart = d3.select("body")
+        .append("svg")
+        .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .attr("class", "chart");
 
     //Example 2.4 line 8...set bars for each province
     var bars = chart.selectAll(".bars")
