@@ -44,8 +44,7 @@ function setMap(){
         .defer(d3.json, "data/FranceRegions.topojson") //load choropleth spatial data
         .await(callback);
 		
-	var graticule = d3.geo.graticule()
-			.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+	
 
 	function callback(error, csvData, europe, france){
 		
