@@ -65,7 +65,7 @@ function setMap(){
         franceRegions = joinData(franceRegions, csvData);
 		
 		//create the color scale
-        var colorScale = makeColorScale(data);
+        var colorScale = makeColorScale(csvData);
 
         //Example 1.3 line 24...add enumeration units to the map
         setEnumerationUnits(franceRegions, map, path, colorScale);
