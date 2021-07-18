@@ -73,27 +73,7 @@ function setMap(){
 		//add coordinated visualization to the map
         setChart(csvData, colorScale);
     };
-	//function to create a dropdown menu for attribute selection
-	function createDropdown(){
-		//add select element
-		var dropdown = d3.select("body")
-			.append("select")
-			.attr("class", "dropdown");
-
-		//add initial option
-		var titleOption = dropdown.append("option")
-			.attr("class", "titleOption")
-			.attr("disabled", "true")
-			.text("Select Attribute");
-
-		//add attribute name options
-		var attrOptions = dropdown.selectAll("attrOptions")
-			.data(attrArray)
-			.enter()
-			.append("option")
-			.attr("value", function(d){ return d })
-			.text(function(d){ return d });
-	};
+	
 }; //end of setMap()
 
 //function to create coordinated bar chart
@@ -285,7 +265,27 @@ function choropleth(props, colorScale){
 };
 
 
+//function to create a dropdown menu for attribute selection
+function createDropdown(){
+	//add select element
+	var dropdown = d3.select("body")
+		.append("select")
+		.attr("class", "dropdown");
 
+	//add initial option
+	var titleOption = dropdown.append("option")
+		.attr("class", "titleOption")
+		.attr("disabled", "true")
+		.text("Select Attribute");
+
+	//add attribute name options
+	var attrOptions = dropdown.selectAll("attrOptions")
+		.data(attrArray)
+		.enter()
+		.append("option")
+		.attr("value", function(d){ return d })
+		.text(function(d){ return d });
+};
 
    
 	
