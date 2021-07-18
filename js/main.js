@@ -85,7 +85,7 @@ function makeColorScale(data){
     ];
 
     //create color scale generator
-    var colorScale = d3.scale.quantile()
+    var colorScale = d3.scaleQuantile()
         .range(colorClasses);
 
     //build array of all values of the expressed attribute
