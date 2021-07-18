@@ -69,6 +69,31 @@ function setMap(){
     };
 }; //end of setMap()
 
+//Example 1.4 line 11...function to create color scale generator
+function makeColorScale(data){
+    var colorClasses = [
+        "#D4B9DA",
+        "#C994C7",
+        "#DF65B0",
+        "#DD1C77",
+        "#980043"
+    ];
+
+    //create color scale generator
+    var colorScale = d3.scaleQuantile()
+        .range(colorClasses);
+
+    //build two-value array of minimum and maximum expressed attribute values
+    var minmax = [
+        d3.min(data, function(d) { return parseFloat(d[expressed]); }),
+        d3.max(data, function(d) { return parseFloat(d[expressed]); })
+    ];
+    //assign two-value array as scale domain
+    colorScale.domain(minmax);
+
+    return colorScale;
+};
+
 function setGraticule(map, path){
     //...GRATICULE BLOCKS FROM PREVIOUS MODULE
 	
@@ -120,18 +145,21 @@ function joinData(franceRegions, csvData){
     return franceRegions;
 };
 
-function setEnumerationUnits(franceRegions, map, path){
-    //...REGIONS BLOCK FROM PREVIOUS MODULE
-	
-        //add France regions to map
-        var regions = map.selectAll(".regions")
-            .data(franceRegions)
-            .enter()
-            .append("path")
-            .attr("class", function(d){
-                return "regions " + d.properties.adm1_code;
-            })
-            .attr("d", path);
+//Example 1.3 line 38
+function setEnumerationUnits(franceRegions, map, path, colorScale){
+
+    //add France regions to map
+    var regions = map.selectAll(".regions")
+        .data(franceRegions)
+        .enter()
+        .append("path")
+        .attr("class", function(d){
+            return "regions " + d.properties.adm1_code;
+        })
+        .attr("d", path)
+        .style("fill", function(d){
+            return colorScale(d.properties[expressed]);
+        });
 };
 
 
