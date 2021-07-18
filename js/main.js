@@ -15,7 +15,7 @@ window.onload = setMap();
 //Example 1.4 line 1...set up choropleth map
 function setMap(){
 
-    /map frame dimensions
+    //map frame dimensions
     var width = window.innerWidth * 0.5,
         height = 460;
 
