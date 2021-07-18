@@ -69,16 +69,66 @@ function setMap(){
 
 function setGraticule(map, path){
     //...GRATICULE BLOCKS FROM PREVIOUS MODULE
+	var graticule = d3.geo.graticule()
+            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+
+        
+		
+		//create graticule lines
+        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+            .data(graticule.lines()) //bind graticule lines to each element to be created
+            .enter() //create an element for each datum
+            .append("path") //append each element to the svg as a path element
+            .attr("class", "gratLines") //assign class for styling
+            .attr("d", path); //project graticule lines
+			
+		//create graticule background
+        var gratBackground = map.append("path")
+            .datum(graticule.outline()) //bind graticule background
+            .attr("class", "gratBackground") //assign class for styling
+            .attr("d", path) //project graticule
 };
 
 function joinData(franceRegions, csvData){
     //...DATA JOIN LOOPS FROM EXAMPLE 1.1
+	//loop through csv to assign each set of csv attribute values to geojson region
+    for (var i=0; i<csvData.length; i++){
+        var csvRegion = csvData[i]; //the current region
+        var csvKey = csvRegion.adm1_code; //the CSV primary key
+
+        //loop through geojson regions to find correct region
+        for (var a=0; a<franceRegions.length; a++){
+
+            var geojsonProps = franceRegions[a].properties; //the current region geojson properties
+            var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
+
+            //where primary keys match, transfer csv data to geojson properties object
+            if (geojsonKey == csvKey){
+
+                //assign all attributes and values
+                attrArray.forEach(function(attr){
+                    var val = parseFloat(csvRegion[attr]); //get csv attribute value
+                    geojsonProps[attr] = val; //assign attribute and value to geojson properties
+                });
+            };
+        };
+    };
 
     return franceRegions;
 };
 
 function setEnumerationUnits(franceRegions, map, path){
     //...REGIONS BLOCK FROM PREVIOUS MODULE
+	
+        //add France regions to map
+        var regions = map.selectAll(".regions")
+            .data(franceRegions)
+            .enter()
+            .append("path")
+            .attr("class", function(d){
+                return "regions " + d.properties.adm1_code;
+            })
+            .attr("d", path);
 };
 
 
