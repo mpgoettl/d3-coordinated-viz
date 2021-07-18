@@ -43,17 +43,16 @@ function setMap(){
         .defer(d3.json, "data/EuropeCountries.topojson") //load background spatial data
         .defer(d3.json, "data/FranceRegions.topojson") //load choropleth spatial data
         .await(callback);
+		
+	var graticule = d3.geo.graticule()
+			.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
 
 	function callback(error, csvData, europe, france){
 		
 		//place graticule on the map
         setGraticule(map, path);
 		
-		
-		
-        
-
-        //translate europe and France TopoJSONs
+		//translate europe and France TopoJSONs
         var europeCountries = topojson.feature(europe, europe.objects.EuropeCountries),
             franceRegions = topojson.feature(france, france.objects.FranceRegions).features;
 
@@ -74,8 +73,7 @@ function setMap(){
 function setGraticule(map, path){
     //...GRATICULE BLOCKS FROM PREVIOUS MODULE
 	
-	var graticule = d3.geo.graticule()
-			.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+	
         
 		
 	//create graticule lines
