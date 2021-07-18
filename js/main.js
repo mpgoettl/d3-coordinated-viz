@@ -45,12 +45,14 @@ function setMap(){
         .await(callback);
 
 	function callback(error, csvData, europe, france){
-
+		
+		//place graticule on the map
+        setGraticule(map, path);
+		
 		var graticule = d3.geo.graticule()
 			.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
 		
-        //place graticule on the map
-        setGraticule(map, path);
+        
 
         //translate europe and France TopoJSONs
         var europeCountries = topojson.feature(europe, europe.objects.EuropeCountries),
