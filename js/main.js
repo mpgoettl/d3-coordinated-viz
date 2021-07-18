@@ -30,9 +30,9 @@ function setMap(){
 		
     //Example 1.4 line 3...use d3.queue to parallelize asynchronous data loading
     d3_queue.queue()
-        .defer(d3.csv, "/unitsData.csv") //load attributes from csv
-        .defer(d3.json, "../data/EuropeCountries.topojson") //load background spatial data
-        .defer(d3.json, "../data/FranceRegions.topojson") //load choropleth spatial data
+        .defer(d3.csv, "data/unitsData.csv") //load attributes from csv
+        .defer(d3.json, "data/EuropeCountries.topojson") //load background spatial data
+        .defer(d3.json, "data/FranceRegions.topojson") //load choropleth spatial data
         .await(callback);
 
    //Example 1.5 line 1
