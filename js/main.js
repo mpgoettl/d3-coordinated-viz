@@ -322,10 +322,7 @@ function changeAttribute(attribute, csvData){
     var colorScale = makeColorScale(csvData);
 
     //recolor enumeration units
-    //Example 1.5 line 9...recolor enumeration units
     var regions = d3.selectAll(".regions")
-        .transition()
-        .duration(1000)
         .style("fill", function(d){
             return choropleth(d.properties, colorScale)
         });
