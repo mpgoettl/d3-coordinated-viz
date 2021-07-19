@@ -105,53 +105,17 @@ function setChart(csvData, colorScale){
         .attr("class", "chart");
 
     //Example 2.4 line 8...set bars for each province
-    var bars = chart.selectAll(".bars")
+     var bars = chart.selectAll(".bar")
         .data(csvData)
         .enter()
         .append("rect")
         .sort(function(a, b){
-            return a[expressed]-b[expressed]
+            return b[expressed]-a[expressed]
         })
         .attr("class", function(d){
-            return "bars " + d.adm1_code;
+            return "bar " + d.adm1_code;
         })
-        .attr("width", chartWidth / csvData.length - 1)
-        .attr("x", function(d, i){
-            return i * (chartWidth / csvData.length);
-        })
-        .attr("height", function(d){
-            return yScale(parseFloat(d[expressed]));
-        })
-        .attr("y", function(d){
-            return chartHeight - yScale(parseFloat(d[expressed]));
-        })
-		//Example 2.5 line 23...end of bars block
-        .style("fill", function(d){
-            return choropleth(d, colorScale);
-        });
-		
-	//annotate bars with attribute value text
-    var numbers = chart.selectAll(".numbers")
-        .data(csvData)
-        .enter()
-        .append("text")
-        .sort(function(a, b){
-            return a[expressed]-b[expressed]
-        })
-        .attr("class", function(d){
-            return "numbers " + d.adm1_code;
-        })
-        .attr("text-anchor", "middle")
-        .attr("x", function(d, i){
-            var fraction = chartWidth / csvData.length;
-            return i * fraction + (fraction - 1) / 2;
-        })
-        .attr("y", function(d){
-            return chartHeight - yScale(parseFloat(d[expressed])) + 15;
-        })
-        .text(function(d){
-            return d[expressed];
-        });
+        .attr("width", chartInnerWidth / csvData.length - 1);
 		
 	//below Example 2.8...create a text element for the chart title
     var chartTitle = chart.append("text")
@@ -159,7 +123,9 @@ function setChart(csvData, colorScale){
         .attr("y", 40)
         .attr("class", "chartTitle")
         .text("Number of Variable " + expressed[3] + " in each region");
-};
+//set bar positions, heights, and colors
+    updateChart(bars, csvData.length, colorScale);
+}; //end of setChart()
 
 
 //...EXAMPLE 1.3 LINES 29-41
@@ -313,28 +279,34 @@ function changeAttribute(attribute, csvData){
             return choropleth(d.properties, colorScale)
         });
 
-    //re-sort, resize, and recolor bars
+     //in changeAttribute()...Example 1.5 line 15...re-sort bars
     var bars = d3.selectAll(".bar")
         //re-sort bars
         .sort(function(a, b){
             return b[expressed] - a[expressed];
+        });
+
+    updateChart(bars, csvData.length, colorScale);
+}; //end of changeAttribute()
+
+//function to position, size, and color bars in chart
+function updateChart(bars, n, colorScale){
+    //position bars
+    bars.attr("x", function(d, i){
+            return i * (chartInnerWidth / n) + leftPadding;
         })
-        .attr("x", function(d, i){
-            return i * (chartInnerWidth / csvData.length) + leftPadding;
-        })
-        //resize bars
+        //size/resize bars
         .attr("height", function(d, i){
             return 463 - yScale(parseFloat(d[expressed]));
         })
         .attr("y", function(d, i){
             return yScale(parseFloat(d[expressed])) + topBottomPadding;
         })
-        //recolor bars
+        //color/recolor bars
         .style("fill", function(d){
             return choropleth(d, colorScale);
         });
-};
-	
+};	
 	
 })(); //last line of main.js
 
