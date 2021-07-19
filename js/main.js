@@ -7,7 +7,20 @@
 var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
 var expressed = attrArray[0]; //initial attribute
 
+//chart frame dimensions
+var chartWidth = window.innerWidth * 0.425,
+    chartHeight = 473,
+    leftPadding = 25,
+    rightPadding = 2,
+    topBottomPadding = 5,
+    chartInnerWidth = chartWidth - leftPadding - rightPadding,
+    chartInnerHeight = chartHeight - topBottomPadding * 2,
+    translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
+//create a scale to size bars proportionally to frame and for axis
+var yScale = d3.scale.linear()
+    .range([463, 0])
+    .domain([0, 110]);
 	
 //begin script when window loads
 window.onload = setMap();
@@ -83,15 +96,7 @@ function setMap(){
 
 //function to create coordinated bar chart
 function setChart(csvData, colorScale){
-    //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.425,
-        chartHeight = 473,
-        leftPadding = 25,
-        rightPadding = 2,
-        topBottomPadding = 5,
-        chartInnerWidth = chartWidth - leftPadding - rightPadding,
-        chartInnerHeight = chartHeight - topBottomPadding * 2,
-        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+   
 
     //create a second svg element to hold the bar chart
     var chart = d3.select("body")
