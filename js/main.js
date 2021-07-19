@@ -309,13 +309,13 @@ function changeAttribute(attribute, csvData){
     var colorScale = makeColorScale(csvData);
 
     //recolor enumeration units
-    var regions = chart.selectAll(".regions")
+    var regions = d3.selectAll(".regions")
         .style("fill", function(d){
             return choropleth(d.properties, colorScale)
         });
 		
 	//re-sort, resize, and recolor bars
-    var bars = d3.selectAll(".bar")
+    var bars = chart.selectAll(".bar")
         //re-sort bars
         .sort(function(a, b){
             return b[expressed] - a[expressed];
