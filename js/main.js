@@ -148,6 +148,12 @@ function setChart(csvData, colorScale){
         .text(function(d){
             return d[expressed];
         });
+	 //below Example 2.8...create a text element for the chart title
+    var chartTitle = chart.append("text")
+        .attr("x", 20)
+        .attr("y", 40)
+        .attr("class", "chartTitle")
+        .text("Number of Variable " + expressed[3] + " in each region");
 }; //end of setChart()
 
 
