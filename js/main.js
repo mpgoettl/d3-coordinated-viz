@@ -315,7 +315,7 @@ function changeAttribute(attribute, csvData){
         });
 		
 	//re-sort, resize, and recolor bars
-    var bars = chart.selectAll(".bar")
+    var bars = d3.selectAll(".bar")
         //re-sort bars
         .sort(function(a, b){
             return b[expressed] - a[expressed];
