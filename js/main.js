@@ -94,7 +94,7 @@ function setChart(csvData, colorScale){
         .attr("class", "chart");
 
      //create a scale to size bars proportionally to frame
-    var yScale = d3.scaleLinear()
+    var yScale = d3.scale.linear()
         .range([0, chartHeight])
         .domain([0, 105]);
 
