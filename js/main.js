@@ -136,7 +136,10 @@ function setChart(csvData, colorScale){
         .attr("class", function(d){
             return "bar " + d.adm1_code;
         })
+		
         .attr("width", chartInnerWidth / csvData.length - 1)
+		
+		
         .attr("x", function(d, i){
             return i * (chartInnerWidth / csvData.length) + leftPadding;
         })
@@ -272,6 +275,9 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
         //Example 1.7 line 13
         .style("fill", function(d){
             return choropleth(d.properties, colorScale);
+        })
+		 .on("mouseover", function(d){
+            highlight(d.properties);
         });
 };
 
@@ -347,6 +353,14 @@ function changeAttribute(attribute, csvData){
         .style("fill", function(d){
             return choropleth(d, colorScale);
         });
+};
+
+ //function to highlight enumeration units and bars
+function highlight(props){
+    //change stroke
+    var selected = d3.selectAll("." + props.adm1_code)
+        .style("stroke", "blue")
+        .style("stroke-width", "2");
 };
 	
 })(); //last line of main.js
