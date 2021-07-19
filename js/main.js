@@ -280,7 +280,10 @@ function createDropdown(csvData){
     //add select element
     var dropdown = d3.select("body")
         .append("select")
-        .attr("class", "dropdown");
+        .attr("class", "dropdown")
+        .on("change", function(){
+            changeAttribute(this.value, csvData)
+        });
 
     //add initial option
     var titleOption = dropdown.append("option")
@@ -297,7 +300,20 @@ function createDropdown(csvData){
         .text(function(d){ return d });
 };
 
-	
+//dropdown change listener handler
+function changeAttribute(attribute, csvData){
+    //change the expressed attribute
+    expressed = attribute;
+
+    //recreate the color scale
+    var colorScale = makeColorScale(csvData);
+
+    //recolor enumeration units
+    var regions = d3.selectAll(".regions")
+        .style("fill", function(d){
+            return choropleth(d.properties, colorScale)
+        });
+};	
 	
 })(); //last line of main.js
 
