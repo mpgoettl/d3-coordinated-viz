@@ -330,6 +330,9 @@ function changeAttribute(attribute, csvData){
 	 //Example 1.7 line 22...re-sort, resize, and recolor bars
     var bars = d3.selectAll(".bar")
         //re-sort bars
+		.data(csvData)
+        .enter()
+        .append("rect")
         .sort(function(a, b){
             return b[expressed] - a[expressed];
         })
