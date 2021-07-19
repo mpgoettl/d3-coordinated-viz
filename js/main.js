@@ -336,11 +336,7 @@ function changeAttribute(attribute, csvData){
         .sort(function(a, b){
             return b[expressed] - a[expressed];
         })
-        .transition() //add animation
-        .delay(function(d, i){
-            return i * 20
-        })
-        .duration(500);
+        
         .attr("x", function(d, i){
             return i * (chartInnerWidth / csvData.length) + leftPadding;
         })
