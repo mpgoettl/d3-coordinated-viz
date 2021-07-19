@@ -25,6 +25,13 @@
     margin: 10px 0 0 20px;
 }
 
+.chart {
+    background-color: rgba(128,128,128,.2);
+    border: medium solid #999;
+    float: right;
+    margin: 10px 20px 0 0;
+}
+
 
 .dropdown {
     position: absolute;
@@ -43,10 +50,7 @@ option {
     font-weight: normal;
 }
 
-.chart {
-    float: right;
-    margin: 7px 20px 0 0;
-}
+
 
 .chartTitle {
     font-family: sans-serif;
@@ -54,9 +58,7 @@ option {
     font-weight: bold;
 }
 
-.chartBackground {
-    fill: rgba(128,128,128,.2);
-}
+
 
 .chartFrame {
     fill: none;
