@@ -126,6 +126,28 @@ function setChart(csvData, colorScale){
         .style("fill", function(d){
             return choropleth(d, colorScale);
         });
+	 //annotate bars with attribute value text
+    var numbers = chart.selectAll(".numbers")
+        .data(csvData)
+        .enter()
+        .append("text")
+        .sort(function(a, b){
+            return a[expressed]-b[expressed]
+        })
+        .attr("class", function(d){
+            return "numbers " + d.adm1_code;
+        })
+        .attr("text-anchor", "middle")
+        .attr("x", function(d, i){
+            var fraction = chartWidth / csvData.length;
+            return i * fraction + (fraction - 1) / 2;
+        })
+        .attr("y", function(d){
+            return chartHeight - yScale(parseFloat(d[expressed])) + 15;
+        })
+        .text(function(d){
+            return d[expressed];
+        });
 }; //end of setChart()
 
 

@@ -32,6 +32,11 @@
     margin: 10px 20px 0 0;
 }
 
+.numbers {
+    fill: white;
+    font-family: sans-serif;
+}
+
 
 .dropdown {
     position: absolute;
