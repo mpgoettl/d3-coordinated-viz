@@ -313,7 +313,7 @@ function createDropdown(csvData){
         .text(function(d){ return d });
 };
 
-//dropdown change listener handler
+//Example 1.4 line 14...dropdown change listener handler
 function changeAttribute(attribute, csvData){
     //change the expressed attribute
     expressed = attribute;
@@ -326,17 +326,13 @@ function changeAttribute(attribute, csvData){
         .style("fill", function(d){
             return choropleth(d.properties, colorScale)
         });
-		
-	 //Example 1.7 line 22...re-sort, resize, and recolor bars
+
+    //re-sort, resize, and recolor bars
     var bars = d3.selectAll(".bar")
         //re-sort bars
-		.data(csvData)
-        .enter()
-        .append("rect")
         .sort(function(a, b){
             return b[expressed] - a[expressed];
         })
-        
         .attr("x", function(d, i){
             return i * (chartInnerWidth / csvData.length) + leftPadding;
         })
@@ -351,7 +347,7 @@ function changeAttribute(attribute, csvData){
         .style("fill", function(d){
             return choropleth(d, colorScale);
         });
-};	
+};
 	
 })(); //last line of main.js
 
