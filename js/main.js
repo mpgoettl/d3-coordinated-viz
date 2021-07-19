@@ -103,6 +103,12 @@ function setChart(csvData, colorScale){
         .data(csvData)
         .enter()
         .append("rect")
+		.sort(function(a, b){
+            return a[expressed]-b[expressed]
+        })
+        .attr("class", function(d){
+            return "bars " + d.adm1_code;
+        })
         .attr("class", function(d){
             return "bars " + d.adm1_code;
         })
