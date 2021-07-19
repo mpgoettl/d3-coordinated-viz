@@ -136,10 +136,7 @@ function setChart(csvData, colorScale){
         .attr("class", function(d){
             return "bar " + d.adm1_code;
         })
-		
         .attr("width", chartInnerWidth / csvData.length - 1)
-		
-		
         .attr("x", function(d, i){
             return i * (chartInnerWidth / csvData.length) + leftPadding;
         })
@@ -152,6 +149,10 @@ function setChart(csvData, colorScale){
         .style("fill", function(d){
             return choropleth(d, colorScale);
         });
+		
+	//below Example 2.2 line 31...add style descriptor to each rect
+    var desc = bars.append("desc")
+        .text('{"stroke": "none", "stroke-width": "0px"}');
 
     //create a text element for the chart title
     var chartTitle = chart.append("text")
@@ -276,9 +277,17 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
         .style("fill", function(d){
             return choropleth(d.properties, colorScale);
         })
-		 .on("mouseover", function(d){
+		.on("mouseover", function(d){
             highlight(d.properties);
+        })
+		.on("mouseout", function(d){
+            dehighlight(d.properties);
         });
+		
+	//below Example 2.2 line 16...add style descriptor to each path
+    var desc = regions.append("desc")
+        .text('{"stroke": "#000", "stroke-width": "0.5px"}');
+
 };
 
 
@@ -355,12 +364,52 @@ function changeAttribute(attribute, csvData){
         });
 };
 
- //function to highlight enumeration units and bars
+//function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
     var selected = d3.selectAll("." + props.adm1_code)
         .style("stroke", "blue")
         .style("stroke-width", "2");
+};
+
+ //function to reset the element style on mouseout
+function dehighlight(props){
+    var selected = d3.selectAll("." + props.adm1_code)
+        .style("stroke", function(){
+            return getStyle(this, "stroke")
+        })
+        .style("stroke-width", function(){
+            return getStyle(this, "stroke-width")
+        });
+
+    function getStyle(element, styleName){
+        var styleText = d3.select(element)
+            .select("desc")
+            .text();
+
+        var styleObject = JSON.parse(styleText);
+
+        return styleObject[styleName];
+    };
+	 
+};
+
+//function to create dynamic label
+function setLabel(props){
+    //label content
+    var labelAttribute = "<h1>" + props[expressed] +
+        "</h1><b>" + expressed + "</b>";
+
+    //create info label div
+    var infolabel = d3.select("body")
+        .append("div")
+        .attr("class", "infolabel")
+        .attr("id", props.adm1_code + "_label")
+        .html(labelAttribute);
+
+    var regionName = infolabel.append("div")
+        .attr("class", "labelname")
+        .html(props.name);
 };
 	
 })(); //last line of main.js
