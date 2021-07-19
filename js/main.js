@@ -145,7 +145,7 @@ function setChart(csvData, colorScale){
         .text("Number of Variable " + expressed[3] + " in each region");
 
     //create vertical axis generator
-    var yAxis = d3.axisLeft()
+    var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient("left");
 
