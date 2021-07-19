@@ -81,6 +81,8 @@ function setMap(){
 		
 		//create the color scale
         var colorScale = makeColorScale(csvData);
+		
+		
 
         //Example 1.3 line 24...add enumeration units to the map
         setEnumerationUnits(franceRegions, map, path, colorScale);
@@ -148,7 +150,11 @@ function setChart(csvData, colorScale){
         })
         .style("fill", function(d){
             return choropleth(d, colorScale);
-        });
+        })
+		 //Example 2.5 line 11...bars event listeners
+        .on("mouseover", highlight)
+        .on("mouseout", dehighlight)
+        .on("mousemove", moveLabel);
 		
 	//below Example 2.2 line 31...add style descriptor to each rect
     var desc = bars.append("desc")
@@ -214,7 +220,7 @@ function setGraticule(map, path){
     //...GRATICULE BLOCKS FROM PREVIOUS MODULE
 	
 	var graticule = d3.geo.graticule()
-			.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+		.step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
         
 		
 	//create graticule lines
@@ -282,7 +288,8 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
         })
 		.on("mouseout", function(d){
             dehighlight(d.properties);
-        });
+        })
+		.on("mousemove", moveLabel);
 		
 	//below Example 2.2 line 16...add style descriptor to each path
     var desc = regions.append("desc")
@@ -370,6 +377,8 @@ function highlight(props){
     var selected = d3.selectAll("." + props.adm1_code)
         .style("stroke", "blue")
         .style("stroke-width", "2");
+		
+	setLabel(props);
 };
 
  //function to reset the element style on mouseout
@@ -391,6 +400,9 @@ function dehighlight(props){
 
         return styleObject[styleName];
     };
+	//below Example 2.4 line 21...remove info label
+    d3.select(".infolabel")
+        .remove();
 	 
 };
 
@@ -410,6 +422,32 @@ function setLabel(props){
     var regionName = infolabel.append("div")
         .attr("class", "labelname")
         .html(props.name);
+};
+
+
+
+//Example 2.8 line 1...function to move info label with mouse
+function moveLabel(){
+    //get width of label
+    var labelWidth = d3.select(".infolabel")
+        .node()
+        .getBoundingClientRect()
+        .width;
+
+    //use coordinates of mousemove event to set label coordinates
+    var x1 = d3.event.clientX + 10,
+        y1 = d3.event.clientY - 75,
+        x2 = d3.event.clientX - labelWidth - 10,
+        y2 = d3.event.clientY + 25;
+
+    //horizontal label coordinate, testing for overflow
+    var x = d3.event.clientX > window.innerWidth - labelWidth - 20 ? x2 : x1; 
+    //vertical label coordinate, testing for overflow
+    var y = d3.event.clientY < 75 ? y2 : y1; 
+
+    d3.select(".infolabel")
+        .style("left", x + "px")
+        .style("top", y + "px");
 };
 	
 })(); //last line of main.js
