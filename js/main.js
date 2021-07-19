@@ -125,6 +125,24 @@ function setChart(csvData, colorScale){
         .text("Number of Variable " + expressed[3] + " in each region");
 //set bar positions, heights, and colors
     updateChart(bars, csvData.length, colorScale);
+	
+	//create vertical axis generator
+    var yAxis = d3.axisLeft()
+        .scale(yScale)
+        .orient("left");
+
+    //place axis
+    var axis = chart.append("g")
+        .attr("class", "axis")
+        .attr("transform", translate)
+        .call(yAxis);
+
+    //create frame for chart border
+    var chartFrame = chart.append("rect")
+        .attr("class", "chartFrame")
+        .attr("width", chartInnerWidth)
+        .attr("height", chartInnerHeight)
+        .attr("transform", translate);
 }; //end of setChart()
 
 
