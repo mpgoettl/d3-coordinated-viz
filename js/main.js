@@ -115,6 +115,10 @@ function setChart(csvData, colorScale){
         })
         .attr("y", function(d){
             return chartHeight - yScale(parseFloat(d[expressed]));
+        })
+		 //Example 2.5 line 23...end of bars block
+        .style("fill", function(d){
+            return choropleth(d, colorScale);
         });
 }; //end of setChart()
 
