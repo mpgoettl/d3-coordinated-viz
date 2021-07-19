@@ -7,20 +7,7 @@
 var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
 var expressed = attrArray[0]; //initial attribute
 
-//chart frame dimensions
-var chartWidth = window.innerWidth * 0.425,
-    chartHeight = 473,
-    leftPadding = 25,
-    rightPadding = 2,
-    topBottomPadding = 5,
-    chartInnerWidth = chartWidth - leftPadding - rightPadding,
-    chartInnerHeight = chartHeight - topBottomPadding * 2,
-    translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
-//create a scale to size bars proportionally to frame and for axis
-var yScale = d3.scale.linear()
-    .range([463, 0])
-    .domain([0, 110]);
 	
 //begin script when window loads
 window.onload = setMap();
@@ -89,60 +76,46 @@ function setMap(){
         setChart(csvData, colorScale);
 		
 		//add dropdown to map
-        createDropdown(csvData);
+        //createDropdown(csvData);
     };
 	
 }; //end of setMap()
 
-//function to create coordinated bar chart
 //Example 2.1 line 11...function to create coordinated bar chart
 function setChart(csvData, colorScale){
-   //create a second svg element to hold the bar chart
+    //chart frame dimensions
+    var chartWidth = window.innerWidth * 0.425,
+        chartHeight = 460;
+      //Example 2.1 line 17...create a second svg element to hold the bar chart
     var chart = d3.select("body")
         .append("svg")
         .attr("width", chartWidth)
         .attr("height", chartHeight)
         .attr("class", "chart");
 
+     //create a scale to size bars proportionally to frame
+    var yScale = d3.scaleLinear()
+        .range([0, chartHeight])
+        .domain([0, 105]);
+
     //Example 2.4 line 8...set bars for each province
-     var bars = chart.selectAll(".bar")
+    var bars = chart.selectAll(".bars")
         .data(csvData)
         .enter()
         .append("rect")
-        .sort(function(a, b){
-            return b[expressed]-a[expressed]
-        })
         .attr("class", function(d){
-            return "bar " + d.adm1_code;
+            return "bars " + d.adm1_code;
         })
-        .attr("width", chartInnerWidth / csvData.length - 1);
-		
-	//below Example 2.8...create a text element for the chart title
-    var chartTitle = chart.append("text")
-        .attr("x", 20)
-        .attr("y", 40)
-        .attr("class", "chartTitle")
-        .text("Number of Variable " + expressed[3] + " in each region");
-//set bar positions, heights, and colors
-    updateChart(bars, csvData.length, colorScale);
-	
-	//create vertical axis generator
-    var yAxis = d3.axisLeft()
-        .scale(yScale)
-        .orient("left");
-
-    //place axis
-    var axis = chart.append("g")
-        .attr("class", "axis")
-        .attr("transform", translate)
-        .call(yAxis);
-
-    //create frame for chart border
-    var chartFrame = chart.append("rect")
-        .attr("class", "chartFrame")
-        .attr("width", chartInnerWidth)
-        .attr("height", chartInnerHeight)
-        .attr("transform", translate);
+        .attr("width", chartWidth / csvData.length - 1)
+        .attr("x", function(d, i){
+            return i * (chartWidth / csvData.length);
+        })
+        .attr("height", function(d){
+            return yScale(parseFloat(d[expressed]));
+        })
+        .attr("y", function(d){
+            return chartHeight - yScale(parseFloat(d[expressed]));
+        });
 }; //end of setChart()
 
 
@@ -258,72 +231,7 @@ function choropleth(props, colorScale){
 };
 
 
-//function to create a dropdown menu for attribute selection
-function createDropdown(csvData){
-    //add select element
-    var dropdown = d3.select("body")
-        .append("select")
-        .attr("class", "dropdown")
-        .on("change", function(){
-            changeAttribute(this.value, csvData)
-        });
 
-	//add initial option
-	var titleOption = dropdown.append("option")
-		.attr("class", "titleOption")
-		.attr("disabled", "true")
-		.text("Select Attribute");
-
-	//add attribute name options
-	var attrOptions = dropdown.selectAll("attrOptions")
-		.data(attrArray)
-		.enter()
-		.append("option")
-		.attr("value", function(d){ return d })
-		.text(function(d){ return d });
-};
-
-//Example 1.4 line 14...dropdown change listener handler
-function changeAttribute(attribute, csvData){
-    //change the expressed attribute
-    expressed = attribute;
-
-    //recreate the color scale
-    var colorScale = makeColorScale(csvData);
-
-    //recolor enumeration units
-    var regions = d3.selectAll(".regions")
-        .style("fill", function(d){
-            return choropleth(d.properties, colorScale)
-        });
-
-     //in changeAttribute()...Example 1.5 line 15...re-sort bars
-    var bars = d3.selectAll(".bar")
-        //re-sort bars
-        .sort(function(a, b){
-            return b[expressed] - a[expressed];
-        });
-
-    updateChart(bars, csvData.length, colorScale);
-}; //end of changeAttribute()
-
-//function to position, size, and color bars in chart
-function updateChart(bars, n, colorScale){
-    //position bars
-    bars.attr("x", function(d, i){
-            return i * (chartInnerWidth / n) + leftPadding;
-        })
-        //size/resize bars
-        .attr("height", function(d, i){
-            return 463 - yScale(parseFloat(d[expressed]));
-        })
-        .attr("y", function(d, i){
-            return yScale(parseFloat(d[expressed])) + topBottomPadding;
-        })
-        //color/recolor bars
-        .style("fill", function(d){
-            return choropleth(d, colorScale);
-        });
 };	
 	
 })(); //last line of main.js
