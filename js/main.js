@@ -115,7 +115,7 @@ function setChart(csvData, colorScale){
         })
         .attr("y", function(d){
             return chartHeight - yScale(parseFloat(d[expressed]));
-        })
+        });
 }; //end of setChart()
 
 
@@ -232,7 +232,7 @@ function choropleth(props, colorScale){
 
 
 
-};	
+	
 	
 })(); //last line of main.js
 
