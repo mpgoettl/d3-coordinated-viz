@@ -4,7 +4,7 @@
 (function(){
 
 //pseudo-global variables
-var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
+var attrArray = ["white", "black", "amerind_aknat", "asian", "nathaw_otherpacis", "other", "hispanic"]; //list of attributes
 var expressed = attrArray[0]; //initial attribute
 
 //chart frame dimensions
@@ -41,43 +41,41 @@ function setMap(){
         .attr("width", width)
         .attr("height", height);
 
-   //Example 2.1 line 15...create Albers equal area conic projection centered on France
+   //Example 2.1 line 15...create Albers equal area conic projection centered on US
     var projection = d3.geo.albers()
-        .center([0, 46.2])
-        .rotate([-2, 0])
-        .parallels([43, 62])
-        .scale(2500)
-        .translate([width / 2, height / 2]);
-
+		.center([9.09, 46.33])
+		.rotate([106.45, 0, 0])
+		.parallels([27.91, 45.5])
+		.scale(503.03)
+		.translate([width / 2, height / 2]);
+	
     var path = d3.geo.path()
         .projection(projection);
 		
     //Example 1.4 line 3...use d3.queue to parallelize asynchronous data loading
     d3_queue.queue()
-        .defer(d3.csv, "data/unitsData.csv") //load attributes from csv
-        .defer(d3.json, "data/EuropeCountries.topojson") //load background spatial data
-        .defer(d3.json, "data/FranceRegions.topojson") //load choropleth spatial data
+        .defer(d3.csv, "data/CensusData.csv") //load attributes from csv
+        .defer(d3.json, "data/MapCountries.topojson") //load background spatial data
+        .defer(d3.json, "data/MapStates.topojson") //load choropleth spatial data
         .await(callback);
 		
-	
-
-	function callback(error, csvData, europe, france){
+	function callback(error, csvData, localCountries, states){
 		
 		//place graticule on the map
         setGraticule(map, path);
 		
-		//translate europe and France TopoJSONs
-        var europeCountries = topojson.feature(europe, europe.objects.EuropeCountries),
-            franceRegions = topojson.feature(france, france.objects.FranceRegions).features;
+		//translate countries and states TopoJSONs
+        var mapcountries = topojson.feature(localCountries, localCountries.objects.MapCountries),
+            mapstates = topojson.feature(states, states.objects.MapStates).features;
 
         //add Europe countries to map
         var countries = map.append("path")
-            .datum(europeCountries)
+            .datum(mapcountries)
             .attr("class", "countries")
             .attr("d", path);
 
         //join csv data to GeoJSON enumeration units
-        franceRegions = joinData(franceRegions, csvData);
+        mapstates = joinData(mapstates, csvData);
 		
 		//create the color scale
         var colorScale = makeColorScale(csvData);
@@ -85,7 +83,7 @@ function setMap(){
 		
 
         //Example 1.3 line 24...add enumeration units to the map
-        setEnumerationUnits(franceRegions, map, path, colorScale);
+        setEnumerationUnits(mapstates, map, path, colorScale);
 		
 		//add coordinated visualization to the map
         setChart(csvData, colorScale);
@@ -95,6 +93,7 @@ function setMap(){
     };
 	
 }; //end of setMap()
+		
 
 //function to create coordinated bar chart
 function setChart(csvData, colorScale){
@@ -239,18 +238,18 @@ function setGraticule(map, path){
 		.attr("d", path) //project graticule
 };
 
-function joinData(franceRegions, csvData){
+function joinData(mapstates, csvData){
     //...DATA JOIN LOOPS FROM EXAMPLE 1.1
 	//loop through csv to assign each set of csv attribute values to geojson region
     for (var i=0; i<csvData.length; i++){
         var csvRegion = csvData[i]; //the current region
-        var csvKey = csvRegion.adm1_code; //the CSV primary key
+        var csvKey = csvRegion.STATE_FIPS; //the CSV primary key
 
         //loop through geojson regions to find correct region
-        for (var a=0; a<franceRegions.length; a++){
+        for (var a=0; a<mapstates.length; a++){
 
-            var geojsonProps = franceRegions[a].properties; //the current region geojson properties
-            var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
+            var geojsonProps = mapstates[a].properties; //the current region geojson properties
+            var geojsonKey = geojsonProps.STATE_FIPS; //the geojson primary key
 
             //where primary keys match, transfer csv data to geojson properties object
             if (geojsonKey == csvKey){
@@ -264,19 +263,19 @@ function joinData(franceRegions, csvData){
         };
     };
 
-    return franceRegions;
+    return mapstates;
 };
 
 //Example 1.3 line 38
-function setEnumerationUnits(franceRegions, map, path, colorScale){
+function setEnumerationUnits(mapstates, map, path, colorScale){
 
     //add France regions to map
     var regions = map.selectAll(".regions")
-        .data(franceRegions)
+        .data(mapstates)
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "regions " + d.properties.adm1_code;
+            return "regions " + d.properties.STATE_FIPS;
         })
         .attr("d", path)
         //Example 1.7 line 13
@@ -296,7 +295,6 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
         .text('{"stroke": "#000", "stroke-width": "0.5px"}');
 
 };
-
 
 //function to test for data value and return color
 function choropleth(props, colorScale){
@@ -370,20 +368,19 @@ function changeAttribute(attribute, csvData){
             return choropleth(d, colorScale);
         });
 };
-
 //function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.adm1_code)
+    var selected = d3.selectAll("." + props.STATE_FIPS)
         .style("stroke", "blue")
         .style("stroke-width", "2");
 		
 	setLabel(props);
 };
 
- //function to reset the element style on mouseout
+//function to reset the element style on mouseout
 function dehighlight(props){
-    var selected = d3.selectAll("." + props.adm1_code)
+    var selected = d3.selectAll("." + props.STATE_FIPS)
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
@@ -416,15 +413,13 @@ function setLabel(props){
     var infolabel = d3.select("body")
         .append("div")
         .attr("class", "infolabel")
-        .attr("id", props.adm1_code + "_label")
+        .attr("id", props.STATE_FIPS + "_label")
         .html(labelAttribute);
 
     var regionName = infolabel.append("div")
         .attr("class", "labelname")
         .html(props.name);
 };
-
-
 
 //Example 2.8 line 1...function to move info label with mouse
 function moveLabel(){
@@ -451,5 +446,3 @@ function moveLabel(){
 };
 	
 })(); //last line of main.js
-
-
