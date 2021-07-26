@@ -212,13 +212,15 @@ function setEnumerationUnits(usSTATES, map, path, colorScale){
         .style("fill", function(d){
             return choropleth(d.properties, colorScale);
         })
-        .on("mouseover", function(d){
+		.on("mouseover", function(d){
             highlight(d.properties);
         })
         .on("mouseout", function(d){
-            dehighlight(d.properties);
+            dehighlight(d.properties)
         })
         .on("mousemove", moveLabel);
+		
+        
     
     //add style descriptor to each path
     var desc = regions.append("desc")
