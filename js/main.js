@@ -122,13 +122,13 @@ function joinData(usSTATES, csvData){
     //loop through csv to assign each set of csv attribute values to geojson region
     for (var i=0; i<csvData.length; i++){
         var csvRegion = csvData[i]; //the current region
-        var csvKey = csvRegion.STATE_FIPS; //the CSV primary key
+        var csvKey = csvRegion.adm1_code; //the CSV primary key
 
         //loop through geojson states to find correct state
         for (var a=0; a<usSTATES.length; a++){
 
             var geojsonProps = usSTATES[a].properties; //the current state geojson properties
-            var geojsonKey = geojsonProps.STATE_FIPS; //the geojson primary key
+            var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
 
             //where primary keys match, transfer csv data to geojson properties object
             if (geojsonKey == csvKey){
@@ -206,7 +206,7 @@ function setEnumerationUnits(usSTATES, map, path, colorScale){
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "regions " + d.hiLight;
+            return "regions " + d.adm1_code;
         })
         .attr("d", path)
         .style("fill", function(d){
@@ -396,7 +396,7 @@ function updateChart(bars, n, colorScale){
 //function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.hiLight)
+    var selected = d3.selectAll("." + props.adm1_code)
         .style("stroke", "blue")
         .style("stroke-width", "2");
     
@@ -405,7 +405,7 @@ function highlight(props){
 
 //function to reset the element style on mouseout
 function dehighlight(props){
-    var selected = d3.selectAll("." + props.hiLight)
+    var selected = d3.selectAll("." + props.adm1_code)
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
@@ -413,11 +413,7 @@ function dehighlight(props){
             return getStyle(this, "stroke-width")
         });
     
-    //remove info label
-    d3.select(".infolabel")
-        .remove();
-
-    function getStyle(element, styleName){
+     function getStyle(element, styleName){
         var styleText = d3.select(element)
             .select("desc")
             .text();
@@ -426,6 +422,9 @@ function dehighlight(props){
 
         return styleObject[styleName];
     };
+	 //remove info label
+    d3.select(".infolabel")
+        .remove();
 };
 
 //function to create dynamic label
@@ -440,7 +439,7 @@ function setLabel(props){
     var infolabel = d3.select("body")
         .append("div")
         .attr("class", "infolabel")
-        .attr("id", props.STATE_FIPS + "_label")
+        .attr("id", props.adm1_code + "_label")
         .html(labelAttribute);
 
     var regionName = infolabel.append("div")
