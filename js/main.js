@@ -254,7 +254,7 @@ function setChart(csvData, colorScale){
             return b[expressed]-a[expressed]
         })
         .attr("class", function(d){
-            return "bar " + d.hiLight;
+            return "bar " + d.adm1_code;
         })
         .attr("width", chartInnerWidth / csvData.length - 1)
         .on("mouseover", highlight)
@@ -412,7 +412,8 @@ function dehighlight(props){
         .style("stroke-width", function(){
             return getStyle(this, "stroke-width")
         });
-    
+	 
+	
      function getStyle(element, styleName){
         var styleText = d3.select(element)
             .select("desc")
@@ -422,7 +423,7 @@ function dehighlight(props){
 
         return styleObject[styleName];
     };
-	 //remove info label
+	//remove info label
     d3.select(".infolabel")
         .remove();
 };
