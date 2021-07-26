@@ -1,4 +1,4 @@
-id,name,STATE_FIPS,Hispanic,Other,American Indian/Alaska Native,Asian,Native Hawaiian/Other Pacific Islander,Black,White
+id,NAME,STATE_FIPS,Hispanic ,Reported Other,American Indian/Alaska Native,Asian,Native Hawaiian/Other Pacific Islander,Black,White
 1,Alabama,1,4.28,1.45,0.52,1.36,0.05,26.64,68.09
 2,Alaska,2,7.04,1.53,14.89,6.23,1.25,3.28,64.58
 3,Arizona,4,31.33,6.53,4.5,3.31,0.21,4.5,77.22

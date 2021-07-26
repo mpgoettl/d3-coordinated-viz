@@ -3,7 +3,7 @@
 (function(){
 
 //pseudo-global variables
-var attrArray = ["White", "Black", "American Indian/Alaska Native", "Asian", "Native Hawaiian/Other Pacific Islander", "Other", "Hispanic"]; //list of attributes
+var attrArray = ["Hispanic","Other","American Indian/Alaska Native","Asian","Native Hawaiian/Other Pacific Islander","Black","White"]; 
 var expressed = attrArray[0]; //initial attribute
 
 //chart frame dimensions
@@ -39,7 +39,7 @@ function setMap(){
         .attr("width", width)
         .attr("height", height);
 
-    //create Albers equal area conic projection centered on US
+    //create Albers equal area conic projection centered on France
     var projection = d3.geoAlbers()
 		.center([-10.91, 47.24])
 		.rotate([104.64, 0.00, 0])
@@ -59,7 +59,7 @@ function setMap(){
 
     function callback(data){
 
-        [csvData, fcountries, fstates] = data;    //europe,   france
+        [csvData, usCountries, USA] = data;
 
 
 
@@ -67,29 +67,30 @@ function setMap(){
         setGraticule(map, path);
 
         //translate states TopoJSON
-        var Namerica = topojson.feature(fcountries, fcountries.objects.countries),
-            USstates = topojson.feature(fstates, fstates.objects.states).features;
+        var UScountries = topojson.feature(usCountries, usCountries.objects.countries),
+            usSTATES = topojson.feature(USA, USA.objects.states).features;
 
-        //add outlines for countries to map
-        var cOutlines = map.append("path")
-            .datum(Namerica)
-            .attr("class", "cOutlines")
+        //add NA countries to map
+        var NAcountries = map.append("path")
+            .datum(UScountries)
+            .attr("class", "NAcountries")
             .attr("d", path);
 
         //join csv data to GeoJSON enumeration units
-        USstates = joinData(USstates, csvData);
+        usSTATES = joinData(usSTATES, csvData);
 
         //create the color scale
         var colorScale = makeColorScale(csvData);
 
         //add enumeration units to the map
-        setEnumerationUnits(USstates, map, path, colorScale);
+        setEnumerationUnits(usSTATES, map, path, colorScale);
 
         //add coordinated visualization to the map
         setChart(csvData, colorScale);
 
         // dropdown
         createDropdown(csvData);
+		
 
     };
 }; //end of setMap()
@@ -116,17 +117,17 @@ function setGraticule(map, path){
         .attr("d", path); //project graticule lines
 };
 
-function joinData(USstates, csvData){
+function joinData(usSTATES, csvData){
     
-    //loop through csv to assign each set of csv attribute values to geojson states
+    //loop through csv to assign each set of csv attribute values to geojson region
     for (var i=0; i<csvData.length; i++){
-        var csvState = csvData[i]; //the current State
-        var csvKey = csvState.STATE_FIPS; //the CSV primary key
+        var csvRegion = csvData[i]; //the current region
+        var csvKey = csvRegion.STATE_FIPS; //the CSV primary key
 
-        //loop through geojson rStates to find correct State
-        for (var a=0; a<USstates.length; a++){
+        //loop through geojson states to find correct state
+        for (var a=0; a<usSTATES.length; a++){
 
-            var geojsonProps = USstates[a].properties; //the current State geojson properties
+            var geojsonProps = usSTATES[a].properties; //the current state geojson properties
             var geojsonKey = geojsonProps.STATE_FIPS; //the geojson primary key
 
             //where primary keys match, transfer csv data to geojson properties object
@@ -134,7 +135,7 @@ function joinData(USstates, csvData){
 
                 //assign all attributes and values
                 attrArray.forEach(function(attr){
-                    var val = parseFloat(csvState[attr]); //get csv attribute value
+                    var val = parseFloat(csvRegion[attr]); //get csv attribute value
                     geojsonProps[attr] = val; //assign attribute and value to geojson properties
                 });
             };
@@ -142,17 +143,17 @@ function joinData(USstates, csvData){
     };
 
 
-    return USstates;
+    return usSTATES;
 };
 
 //Natural Breaks color scale
 function makeColorScale(data){
     var colorClasses = [
-		"#00CDCD",		//"#D4B9DA",
+        "#00CDCD",		//"#D4B9DA",
         "#8FD8D8",		 //"#C994C7",
         "#AEEEEE",		//"#DF65B0",
         "#37FDFC",		//"#DD1C77",
-        "#00E5EE"		//	"#980043"		
+        "#00E5EE"		//	"#980043"
     ];
 
     //create color scale generator
@@ -197,15 +198,15 @@ function choropleth(props, colorScale){
 };
 
 
-function setEnumerationUnits(USstates, map, path, colorScale){
+function setEnumerationUnits(usSTATES, map, path, colorScale){
     
-    //add States to map
-    var rStates = map.selectAll(".rStates")
-        .data(USstates)
+    //add France regions to map
+    var regions = map.selectAll(".regions")
+        .data(usSTATES)
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "rStates " + d.properties.STATE_FIPS;
+            return "regions " + d.hiLight;
         })
         .attr("d", path)
         .style("fill", function(d){
@@ -220,8 +221,10 @@ function setEnumerationUnits(USstates, map, path, colorScale){
         .on("mousemove", moveLabel);
     
     //add style descriptor to each path
-    var desc = rStates.append("desc")
+    var desc = regions.append("desc")
     .text('{"stroke": "#000", "stroke-width": "0.5px"}');
+	
+	
 };
 
 //function to create coordinated bar chart
@@ -242,7 +245,7 @@ function setChart(csvData, colorScale){
         .attr("transform", translate);
 
 
-    //set bars for each State
+    //set bars for each state
     var bars = chart.selectAll(".bar")
         .data(csvData)
         .enter()
@@ -251,7 +254,7 @@ function setChart(csvData, colorScale){
             return b[expressed]-a[expressed]
         })
         .attr("class", function(d){
-            return "bar " + d.STATE_FIPS;
+            return "bar " + d.hiLight;
         })
         .attr("width", chartInnerWidth / csvData.length - 1)
         .on("mouseover", highlight)
@@ -267,7 +270,7 @@ function setChart(csvData, colorScale){
         .attr("x", 150)
         .attr("y", 40)
         .attr("class", "chartTitle")
-        .text("Percent of reported Ethnicity in each State"); //expressed[3] + 
+        .text("Percent of reported Ethnicity in each State");  //+ expressed[3] + "
 
     //create vertical axis generator
     var yAxis = d3.axisLeft()
@@ -290,7 +293,7 @@ function setChart(csvData, colorScale){
     updateChart(bars, csvData.length, colorScale);
 };
 
-//create a dropdown menu for attribute selection
+//function to create a dropdown menu for attribute selection
 function createDropdown(csvData){
     //add select element
     var dropdown = d3.select("body")
@@ -345,7 +348,7 @@ function changeAttribute(attribute, csvData){
     var colorScale = makeColorScale(csvData);
 
     //recolor enumeration units
-    var rStates = d3.selectAll(".rStates")
+    var regions = d3.selectAll(".regions")
         .transition()
         .duration(1000)
         .style("fill", function(d){
@@ -387,13 +390,13 @@ function updateChart(bars, n, colorScale){
     
     //add text to chart title
     var chartTitle = d3.select(".chartTitle")
-        .text("Percent of reported Ethnicity in each State");  //" + expressed[3] + "
+        .text("Percent of reported Ethnicity in each State"); // + expressed[3] + 
 };
 
 //function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.STATE_FIPS)
+    var selected = d3.selectAll("." + props.hiLight)
         .style("stroke", "blue")
         .style("stroke-width", "2");
     
@@ -402,7 +405,7 @@ function highlight(props){
 
 //function to reset the element style on mouseout
 function dehighlight(props){
-    var selected = d3.selectAll("." + props.STATE_FIPS)
+    var selected = d3.selectAll("." + props.hiLight)
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
@@ -428,9 +431,11 @@ function dehighlight(props){
 //function to create dynamic label
 function setLabel(props){
     //label content
-    var labelAttribute = "<h1>" + props[expressed] +
-        "</h1><b>" + expressed + "</b>";
+    var labelAttribute = "<h1>" + props[expressed] + "%" +
+        "</h1><b>" + expressed + "</b>" ;
 
+	
+	
     //create info label div
     var infolabel = d3.select("body")
         .append("div")
@@ -438,9 +443,11 @@ function setLabel(props){
         .attr("id", props.STATE_FIPS + "_label")
         .html(labelAttribute);
 
-    var StateName = infolabel.append("div")
+    var regionName = infolabel.append("div")
         .attr("class", "labelname")
         .html(props.name);
+		
+		
 };
 
 //function to move info label with mouse

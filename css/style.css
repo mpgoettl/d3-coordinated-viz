@@ -3,20 +3,20 @@
 	margin: 10px 0 0 20px;
 }
 
-.cOutlines {
-	fill: #C3E4ED;
+.NAcountries {
+	fill: #B6D0E2;
 	stroke: #CCC;
 	stroke-width: 2px;
 }
 
-.rStates {
+.regions {
 	stroke: #000;
 	stroke-width: 0.5px;
 	stroke-linecap: round;
 }
 
 .gratBackground {
-	fill: #B0E0E6;
+	fill: #00008B;
 }
 
 .gratLines {
@@ -31,15 +31,13 @@
 }
 
 .chartTitle {
-	
-	
 	font-family: sans-serif;
 	font-size: 1.5em;
 	font-weight: bold;
 }
 
 .chartBackground {
-	fill:  #B0E0E6;     
+	fill: #B6D0E2;
 }
 
 .chartFrame {
