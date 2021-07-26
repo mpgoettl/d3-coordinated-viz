@@ -200,7 +200,7 @@ function choropleth(props, colorScale){
 
 function setEnumerationUnits(usSTATES, map, path, colorScale){
     
-    //add France regions to map
+    //add states to map
     var regions = map.selectAll(".regions")
         .data(usSTATES)
         .enter()
