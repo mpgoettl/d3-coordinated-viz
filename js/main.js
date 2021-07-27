@@ -149,12 +149,12 @@ function joinData(usSTATES, csvData){
 //Natural Breaks color scale
 function makeColorScale(data){
     var colorClasses = [
-        "#fb0805",	//"#00CDCD",		//"#D4B9DA",
-        "#fb9d05",		//"#8FD8D8",		 //"#C994C7",
-		"#f1fb05",			//"#AEEEEE",		//"#DF65B0",
-		"#05fb16",			// "#37FDFC",		//"#DD1C77",
-		"#0528fb",			//"#00E5EE"		//	"#980043"
-		"#7205fb"
+        "#fb0805",	// red
+        "#fb9d05",	// orange	
+		"#f1fb05",	// yellow		
+		"#05fb16",	// green		
+		"#0528fb",	// blue		
+		"#7205fb"	// purple
     ];
 
     //create color scale generator
