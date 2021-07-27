@@ -206,12 +206,16 @@ function setEnumerationUnits(usSTATES, map, path, colorScale){
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "regions " + d.adm1_code;
-        })
+            return "regions " + d.properties.adm1_code;
+        
+		})
+		
         .attr("d", path)
         .style("fill", function(d){
             return choropleth(d.properties, colorScale);
         })
+		
+		
 		.on("mouseover", function(d){
             highlight(d.properties);
         })
@@ -224,8 +228,9 @@ function setEnumerationUnits(usSTATES, map, path, colorScale){
     
     //add style descriptor to each path
     var desc = regions.append("desc")
-    .text('{"stroke": "#000", "stroke-width": "0.5px"}');
 	
+    .text('{"stroke": "#000", "stroke-width": "0.5px"}');
+	console.log(desc);
 	
 };
 
