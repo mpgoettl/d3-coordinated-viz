@@ -1,4 +1,5 @@
 .map {
+	position: absolute;
 	border: 3px solid #999;
 	margin: 10px 0 0 20px;
 }
@@ -33,7 +34,8 @@
 }
 
 .chart {
-	float: right;
+	position: absolute;	
+	top: 500px;	
 	margin: 7px 20px 0 0;
 }
 

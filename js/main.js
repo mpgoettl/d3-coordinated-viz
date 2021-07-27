@@ -7,19 +7,20 @@ var attrArray = ["Hispanic","Other","American Indian/Alaska Native","Asian","Nat
 var expressed = attrArray[0]; //initial attribute
 
 //chart frame dimensions
-var chartWidth = window.innerWidth * 0.425,
-    chartHeight = 473,
-    leftPadding = 25,
-    rightPadding = 2,
-    topBottomPadding = 5,
-    chartInnerWidth = chartWidth - leftPadding - rightPadding,
-    chartInnerHeight = chartHeight - topBottomPadding * 2,
-    translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+	var chartWidth = window.innerWidth * 0.40,
+		chartHeight = 473,
+		leftPadding = 25,
+		rightPadding = 2,
+		topBottomPadding = 5,
+		chartInnerWidth = chartWidth - leftPadding - rightPadding,
+		chartInnerHeight = chartHeight - topBottomPadding * 2,
+		translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
-//create a scale to size bars proportionally to frame and for axis
-var yScale = d3.scaleLinear()
-    .range([chartHeight - 10, 0])
-    .domain([0, 88*1.1]); // csv first column max = 88
+	//create a scale to size bars proportionally to frame and for axis
+	var yScale = d3.scaleLinear()
+		.range([chartHeight - 10, 0])
+		.domain([0, 88*1.1]); // csv first column max = 88
+
 
 
 //begin script when window loads
@@ -29,7 +30,7 @@ window.onload = setMap();
 function setMap(){
     
     //map frame dimensions
-    var width = window.innerWidth * 0.5,
+    var width = window.innerWidth * 0.40,
         height = 460;
 
     //create new svg container for the map
@@ -175,12 +176,12 @@ function makeColorScale(data){
         return d3.min(d);
     });
     //remove first value from domain array to create class breakpoints
-    //console.log(domainArray);
+    
     domainArray.shift();
 
     //assign array of last 4 cluster minimums as domain
     colorScale.domain(domainArray);
-    //console.log(domainArray);
+    
 
     return colorScale;
 };
@@ -231,12 +232,13 @@ function setEnumerationUnits(usSTATES, map, path, colorScale){
     var desc = regions.append("desc")
 	
     .text('{"stroke": "#000", "stroke-width": "0.5px"}');
-	console.log(desc);
+	
 	
 };
 
 //function to create coordinated bar chart
 function setChart(csvData, colorScale){
+	
 
     //create a second svg element to hold the bar chart
     var chart = d3.select("body")
