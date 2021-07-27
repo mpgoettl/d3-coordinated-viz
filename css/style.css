@@ -16,8 +16,15 @@
 }
 
 .gratBackground {
-	fill: #4682b4;
+   
+    	fill: #4682b4;
+	opacity: .25;
+	
+
 }
+
+	
+
 
 .gratLines {
 	fill: none;
@@ -38,6 +45,8 @@
 
 .chartBackground {
 	fill: #4682b4;
+	opacity: .25;
+
 }
 
 .chartFrame {
