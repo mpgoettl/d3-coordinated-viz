@@ -149,11 +149,12 @@ function joinData(usSTATES, csvData){
 //Natural Breaks color scale
 function makeColorScale(data){
     var colorClasses = [
-        "#00CDCD",		//"#D4B9DA",
-        "#8FD8D8",		 //"#C994C7",
-        "#AEEEEE",		//"#DF65B0",
-        "#37FDFC",		//"#DD1C77",
-        "#00E5EE"		//	"#980043"
+        "#fb0805",	//"#00CDCD",		//"#D4B9DA",
+        "#fb9d05",		//"#8FD8D8",		 //"#C994C7",
+		"#f1fb05",			//"#AEEEEE",		//"#DF65B0",
+		"#05fb16",			// "#37FDFC",		//"#DD1C77",
+		"#0528fb",			//"#00E5EE"		//	"#980043"
+		"#7205fb"
     ];
 
     //create color scale generator
@@ -168,7 +169,7 @@ function makeColorScale(data){
     };
 
     //cluster data using ckmeans clustering algorithm to create natural breaks
-    var clusters = ss.ckmeans(domainArray, 5);
+    var clusters = ss.ckmeans(domainArray, 6);
     //reset domain array to cluster minimums
     domainArray = clusters.map(function(d){
         return d3.min(d);

@@ -16,13 +16,13 @@
 }
 
 .gratBackground {
-	fill: #00008B;
+	fill: #4682b4;
 }
 
 .gratLines {
 	fill: none;
 	stroke: #999;
-	stroke-width: 1px;
+	stroke-width: 0px;
 }
 
 .chart {
@@ -37,7 +37,7 @@
 }
 
 .chartBackground {
-	fill: #B6D0E2;
+	fill: #4682b4;
 }
 
 .chartFrame {
